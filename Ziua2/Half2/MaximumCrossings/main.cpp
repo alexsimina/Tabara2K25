@@ -33,41 +33,35 @@ struct AIB
 };
 
 vector<int> arr;
-
+int t;
 
 int main()
 {
-    int n, q;
-    cin >> n >> q;
-    AIB smen(n);
-    arr.resize(n + 9);
-    for(int i = 1; i <= n; i++)
+    cin >> t;
+    while(t--)
     {
-        cin >> arr[i];
+        int n;
+        cin >> n;
+        AIB aib(n);
+        arr.resize(n + 9);
+        vector<int> freq(n + 9);
+
+        long long int rez = 0;
+        for(int i = 1; i <= n; i++)
+        {
+            cin >> arr[i];
+            freq[arr[i]]++;
+            
+            rez += aib.query(n) - aib.query(arr[i]);
+            aib.update(arr[i], 1);
+        }
+        for(int i = 1; i <= n; i++)
+        {
+            int k = freq[i];
+            rez += 1ll * k * (k - 1) / 2;
+        }
+        cout << rez << '\n';
     }
 
-    for(int i = 1; i <= n; i++)
-    {
-        
-    }
-
-    for(int i = 1; i <= q; i++)
-    {
-        int op;
-        cin >> op;
-        if(op == 1)
-        {
-            int a, b, u;
-            cin >> a >> b >> u;
-            smen.update(a, u);
-            smen.update(b + 1, -u);
-        }
-        else
-        {
-            int x;
-            cin >> x;
-            cout << (arr[x] + smen.query(x)) << '\n';
-        }
-    }
     return 0;
 }

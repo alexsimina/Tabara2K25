@@ -2,39 +2,73 @@
 
 using namespace std;
 
-int arrFinal[100009], arrBegin[100009];
-int freqFinal[100009], freqBegin[100009];
+ifstream fin ("permutariab.in");
+ofstream fout("permutariab.out");
+
+int lsb(int x)
+{
+    return x & (-x);
+}
+
+struct AIB
+{
+    vector<long long int> aib;
+
+    AIB(int n)
+    {
+        aib.resize(n + 9);
+    }
+
+    long long int query(int x)
+    {
+        long long int sum = 0;
+        for(int i = x; i > 0; i -= lsb(i))
+            sum += aib[i];
+
+        return sum;
+    }
+
+    void update(int x, int add)
+    {
+        for(int i = x; i < aib.size(); i += lsb(i))
+            aib[i] += add;
+    }
+};
+
+vector<int> arrBegin;
+
 
 int main()
 {
     int n;
-    cin >> n;
+    fin >> n;
+    AIB aib(n);
+    arrBegin.resize(n + 9);
+    map<int, int> indexValFinal;
     for(int i = 1; i <= n; i++)
     {
-        cin >> arrFinal[i];
-        freqBegin[arrFinal[i]]++;
+        int x;
+        fin >> x;
+        indexValFinal[x] = i;
     }
     for(int i = 1; i <= n; i++)
     {
-        cin >> arrBegin[i];
-        freqFinal[arrFinal[i]]++;
+        fin >> arrBegin[i];
     }
 
-    int diff = 0, rez = 0;
+    vector<int> arr(n + 9);
     for(int i = 1; i <= n; i++)
     {
-        diff = 0;
-        freqBegin[arrBegin[i]]--;
-        freqFinal[arrFinal[i]]--;
-        if(freqFinal[arrBegin[i]])
-            diff++;
-        if(freqBegin[arrFinal[i]] == freqFinal[arrFinal[i]])
-            diff--;
-
-        rez += diff;
+        arr[i] = indexValFinal[arrBegin[i]];
     }
-    cout << rez;
 
-    
+    long long int rez = 0;
+    for(int i = n; i >= 1; i--)
+    {
+        rez += aib.query(arr[i] - 1);
+        aib.update(arr[i], 1);
+    }
+    fout << rez;
+
     return 0;
 }
