@@ -2,9 +2,6 @@
 
 using namespace std;
 
-ifstream fin ("schi.in");
-ofstream fout("schi.out");
-
 int lsb(int x)
 {
     return x & (-x);
@@ -53,33 +50,27 @@ struct AIB
     }
 };
 
-int arr[30009], rez[30009];
+int arr[200009], rez[200009];
 
 int main()
 {
     int n;
-    fin >> n;
+    cin >> n;
     AIB aib(n);
     for(int i = 1; i <= n; i++)
     {
-        fin >> arr[i];
+        cin >> arr[i];
         aib.update(i, 1);
-    }
+    }   
 
-    for(int i = n; i >= 1; i--)
+    for(int i = 1; i <= n; i++)
     {
-        rez[i] = aib.cibin(arr[i]);
+        int x;
+        cin >> x;
+        rez[i] = aib.cibin(x);
         aib.update(rez[i], -1);
-    }
 
-    int rez2[30009]{};
-    for(int i = 1; i <= n; i++)
-    {
-        rez2[rez[i]] = i;
+        cout << arr[rez[i]] << ' ';
     }
-    for(int i = 1; i <= n; i++)
-        fout << rez2[i] << '\n';
-
     return 0;
-
 }

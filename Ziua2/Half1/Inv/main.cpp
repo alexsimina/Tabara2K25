@@ -46,7 +46,7 @@ int main()
     for(int i = 1; i <= n; i++)
     {
         fin >> arr[i].first;
-        arr[i].second = i;
+
     }
     sort(arr + 1, arr + n + 1);
 

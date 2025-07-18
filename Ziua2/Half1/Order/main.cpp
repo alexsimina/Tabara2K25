@@ -2,8 +2,8 @@
 
 using namespace std;
 
-ifstream fin ("schi.in");
-ofstream fout("schi.out");
+ifstream fin ("order.in");
+ofstream fout("order.out");
 
 int lsb(int x)
 {
@@ -53,7 +53,7 @@ struct AIB
     }
 };
 
-int arr[30009], rez[30009];
+int arr[30009];
 
 int main()
 {
@@ -62,24 +62,28 @@ int main()
     AIB aib(n);
     for(int i = 1; i <= n; i++)
     {
-        fin >> arr[i];
         aib.update(i, 1);
+        aib.update(i + n, 1);
     }
 
-    for(int i = n; i >= 1; i--)
+    int lastPoz = 2, ramase = n;
+    for(int curr = 1; curr <= n; curr++)
     {
-        rez[i] = aib.cibin(arr[i]);
-        aib.update(rez[i], -1);
-    }
+        
+        int prev = aib.query(lastPoz - 1);
+        int poz = curr + prev;
+        if(poz > ramase)
+        {
+            poz = (poz - 1) % ramase + 1;
+        }
+        poz = aib.cibin(poz);
+        aib.update(poz, -1);
+        lastPoz = poz;
+        
+        ramase--;
 
-    int rez2[30009]{};
-    for(int i = 1; i <= n; i++)
-    {
-        rez2[rez[i]] = i;
+        fout << poz << ' ';
     }
-    for(int i = 1; i <= n; i++)
-        fout << rez2[i] << '\n';
 
     return 0;
-
 }
